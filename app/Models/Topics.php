@@ -13,5 +13,6 @@ class Topics extends Model
 
         'title',
         'content',
+        'category'
     ];
 }

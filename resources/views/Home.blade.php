@@ -110,7 +110,7 @@
 
                 <!-- Playground card -->
                 <div class="col-12 col-md-6">
-                    <a href="" class="nav-card">
+                    <a href="{{route('playground.index')}}" class="nav-card">
                         <h5 class="fw-bold">Playground</h5>
                         <p>Practice in interactive mode</p>
                     </a>

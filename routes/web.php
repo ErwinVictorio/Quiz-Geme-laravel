@@ -6,6 +6,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\TopicsController;
 use App\Models\Topics;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PlaygroundController;
 
 
 
@@ -22,6 +23,12 @@ Route::middleware(['authGate:guest'])->group(function () {
 
 // Route::middleware()      
 Route::middleware(['authGate'])->group(function () {
+
+    // routes/web.php
+
+
+Route::get('/playground', [PlaygroundController::class, 'index'])->name('playground.index');
+Route::post('/playground/run', [PlaygroundController::class, 'run'])->name('playground.run'); // POST from the page
 
     Route::get('/home', function () {
         return view('Home');

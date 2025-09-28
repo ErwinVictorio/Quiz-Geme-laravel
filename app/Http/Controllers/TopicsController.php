@@ -5,21 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Topics;
 use App\Models\Quiz;
+
 class TopicsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $topics = \App\Models\Topics::orderBy('order')->get();
 
-        $topic_list = Topics::all();
+        $grouped = $topics->groupBy('category');
 
-        return  view('tupic-list', [
-            'list' => $topic_list                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+        return view('tupic-list', [
+            'grouped' => $grouped,
         ]);
-    }                                                                              
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -42,11 +43,11 @@ class TopicsController extends Controller
      */
     public function show(string $id)
     {
-        $topicInfo  = Topics::select('content','title')->where('id', $id)->first();
-        $quiz = \Illuminate\Support\Facades\DB::table('quizzes')->select('id','title')->where('topic_id',$id)->first();
-        
-        return view('tupic-info',[
-           'topic_info' => $topicInfo,
+        $topicInfo  = Topics::select('content', 'title')->where('id', $id)->first();
+        $quiz = \Illuminate\Support\Facades\DB::table('quizzes')->select('id', 'title')->where('topic_id', $id)->first();
+
+        return view('tupic-info', [
+            'topic_info' => $topicInfo,
             'quiz' => $quiz
         ]);
     }

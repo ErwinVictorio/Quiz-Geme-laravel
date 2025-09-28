@@ -79,7 +79,7 @@
                                 </a>
                             </li>
                             <li class="mb-2">
-                                <a href="#" class="text-decoration-none text-dark d-flex align-items-center gap-2">
+                                <a href="{{route('leaderboard.global')}}" class="text-decoration-none text-dark d-flex align-items-center gap-2">
                                     <i class="bi bi-trophy text-warning"></i> Leaderboard
                                 </a>
                             </li>

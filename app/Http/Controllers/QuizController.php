@@ -10,34 +10,51 @@ class QuizController extends Controller
 {
     //
 
-        public function show(int $quizId)
-    {
-        // 1) Quiz
-        $quiz = DB::table('quizzes')->where('id', $quizId)->first();
-        abort_if(!$quiz, 404, 'Quiz not found');
+    public function show(int $quizId)
+{
+    // 1) Quiz
+    $quiz = DB::table('quizzes')->where('id', $quizId)->first();
+    abort_if(!$quiz, 404, 'Quiz not found');
 
-        // 2) Topic (for breadcrumb/back link)
-        $topic = DB::table('topics')->select('id','title')->where('id', $quiz->topic_id)->first();
+    // 2) Topic (for breadcrumb/back link)
+    $topic = DB::table('topics')->select('id','title')->where('id', $quiz->topic_id)->first();
 
-        // 3) Questions (decode JSON choices into arrays)
-        $questions = DB::table('questions')
-            ->where('quiz_id', $quizId)
-            ->orderBy('order')
-            ->get()
-            ->map(function ($q) {
-                $arr = json_decode($q->choices, true);
-                // normalize if numerical array → map to A,B,C,D…
-                if (is_array($arr) && array_keys($arr) === range(0, count($arr)-1)) {
-                    $letters = range('A', 'Z');
-                    $q->choices = collect($arr)->mapWithKeys(fn($v,$i)=>[$letters[$i]=>$v])->toArray();
-                } else {
-                    $q->choices = $arr ?? [];
+    // 3) Questions (decode JSON choices into arrays)
+    $questions = DB::table('questions')
+        ->where('quiz_id', $quizId)
+        ->orderBy('order')
+        ->get()
+        ->map(function ($q) {
+            $arr = json_decode($q->choices, true);
+
+            // normalize if numerical array → map to A,B,C,D…
+            if (is_array($arr) && array_keys($arr) === range(0, count($arr)-1)) {
+                $letters = range('A', 'Z');
+                $q->choices = collect($arr)->mapWithKeys(fn($v,$i)=>[$letters[$i]=>$v])->toArray();
+            } else {
+                $q->choices = $arr ?? [];
+            }
+
+            // --- RANDOMIZE OPTIONS (keep original A/B/C/D letters, just shuffle order) ---
+            if (is_array($q->choices) && !empty($q->choices)) {
+                $keys = array_keys($q->choices);
+                shuffle($keys);                   // random order of letters
+                $shuffled = [];
+                foreach ($keys as $k) {
+                    $shuffled[$k] = $q->choices[$k];
                 }
-                return $q;
-            });
+                $q->choices = $shuffled;
+            }
 
-        return view('Quizepage', compact('quiz','questions','topic'));
-    }
+            return $q;
+        });
+
+    // --- RANDOMIZE QUESTION ORDER ---
+    $questions = $questions->shuffle()->values();
+
+    return view('Quizepage', compact('quiz','questions','topic'));
+}
+
 
 
     

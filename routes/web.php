@@ -7,6 +7,7 @@ use App\Http\Controllers\TopicsController;
 use App\Models\Topics;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlaygroundController;
+use App\Http\Controllers\ProfileController;
 
 
 
@@ -15,9 +16,12 @@ Route::middleware(['authGate:guest'])->group(function () {
     Route::get('/', [AuthController::class, 'showLogin'])->name('login.view');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register.view');
 });
+
  Route::post('/register-account', [AuthController::class, 'Register'])->name('register');
  Route::post('/login-account', [AuthController::class, 'login'])->name('login');
  Route::get('/logout',[AuthController::class,'logout'])->name('logout');
+
+
 
 
 
@@ -25,6 +29,9 @@ Route::middleware(['authGate:guest'])->group(function () {
 Route::middleware(['authGate'])->group(function () {
 
     // routes/web.php
+  Route::get('/user-profile', [ProfileController::class, 'index'])->name('profile.edit');     // shows the page
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar'); // upload avatar
+    Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');       // update name/emaillement text-field updates
 
 
 Route::get('/playground', [PlaygroundController::class, 'index'])->name('playground.index');

@@ -24,13 +24,13 @@ class PlaygroundController extends Controller
         ]);
 
         $languageId = $data['language_id'] ?? 51; // 51 = C# (.NET Core) in Judge0 CE
-        $stdin      = $data['stdin'] ?? '';
+        $stdin   = $data['stdin'] ?? '';
 
         // Judge0 CE base url (public instance). You can self-host and change this via .env
         $baseUrl = config('services.judge0.url', 'https://ce.judge0.com');
 
         // submit to Judge0 CE (wait=true so we get the result directly)
-        $resp = Http::asJson()
+        $resp = Http::asJson()  
             ->timeout(25)
             ->post($baseUrl . '/submissions?base64_encoded=false&wait=true', [
                 'source_code' => $data['source'],

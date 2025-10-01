@@ -74,7 +74,7 @@
                         <h6 class="fw-bold text-dark mb-3">User Settings</h6>
                         <ul class="list-unstyled mb-3">
                             <li class="mb-2">
-                                <a href="#" class="text-decoration-none text-dark d-flex align-items-center gap-2">
+                                <a href="{{route('profile.edit')}}" class="text-decoration-none text-dark d-flex align-items-center gap-2">
                                     <i class="bi bi-person-circle text-primary"></i> Profile
                                 </a>
                             </li>
